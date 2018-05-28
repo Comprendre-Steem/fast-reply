@@ -19,6 +19,7 @@ blockchain.
 ## Tool Annoncement
 
 - 0.1: This tool has been [first annonced on Steem on May 21, 2018](https://steemit.com/utopian-io/@roxane/fast-reply-v0-1-never-miss-to-answer-a-comment-again-and-do-it-faster-than-ever).
+- 0.2: First update [released on May 28, 2018](https://steemit.com/utopian-io/@roxane/fast-reply-v0-2-never-miss-to-answer-a-comment-again-and-do-it-faster-than-ever)
 
 ## Live Demo
 

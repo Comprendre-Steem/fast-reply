@@ -20,7 +20,7 @@ var api = sc2.Initialize({
   app: 'fast-reply.app',
   callbackURL: 'http://localhost:8080/#/steemconnect', // Dev localhost URL
   // callbackURL: 'http://very-fast-reply.surge.sh/#/steemconnect', // Beta URL
-  // callbackURL: 'http://fast-reply.surge.sh/steemconnect/',  // Live demo URL
+  // callbackURL: 'http://fast-reply.surge.sh/#/steemconnect/', // Live demo URL
   scope: ['vote', 'comment', 'custom_json']
 })
 
