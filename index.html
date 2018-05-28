@@ -1,261 +1,32 @@
 <!DOCTYPE html>
-<html lang="fr">
-
-<head>
+<html>
+  <head>
     <title>Fast-Reply: Waiting no more</title>
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <!-- Additional fonts & icons -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
-
-    <!-- jQuery + plugins -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-
-    <!-- Steem -->
-    <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
-    <script src="js/sc2.min.js"></script>
-
-    <!-- VUE Framework + plugins -->
-    <script src="https://vuejs.org/js/vue.js"></script>             <!-- DEV  -->
-    <!--script src="https://vuejs.org/js/vue.min.js"></script-->    <!-- PROD -->
-    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
-
-    <!-- BULMA CSS Framework -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@1.0.14/bulma-slider/dist/bulma-slider.min.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bulma-extensions@1.0.14/bulma-slider/dist/bulma-slider.min.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="/css/app.css">
-
-    <!-- Third party libs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
-
     <!-- Favicon https://www.favicon-generator.org/ -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon//apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon//apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon//apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon//apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon//apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon//apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon//apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon//apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon//android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon//favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon//favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon//favicon-16x16.png">
-    <link rel="manifest" href="/img/favicon//manifest.json">
+    <link rel="apple-touch-icon" sizes="57x57" href="static/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="static/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="static/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="static/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="static/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="static/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="static/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="static/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="static/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="static/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="static/favicon//manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/img/favicon//ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="static/favicon//ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-</head>
 
-<body>
-    <div id="vm">
-        <section v-if="steemconnect.user != null">
-            <nav class="navbar has-shadow is-fixed-top">
-                <div class="container">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="#">
-                          <img src="img/fast-reply-icon.png" alt="Waiting no more">Fast-Reply
-                        </a>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">
-                                <span class="compose"><i class="fa fa-filter"></i> Filter <em v-if="filter.id">: {{ filterCounters[filter.id] }} x {{ filter.title | truncate(50) }}</em></span>
-                            </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item" id="filter-article-all" @click.prevent="changeFilter(null,null)">All articles</a>
-                                <a v-for="article in articles" class="navbar-item" :id="'filter-article-'+article.id" @click.prevent="changeFilter(article.id, article.title)">
-                                    {{ filterCounters[article.id] }} x {{ article.title | truncate(50) }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="navbar-end">
-                        <a class="navbar-item">
-                            <span v-if="comments">{{ comments.length }} <i class="fa fa-inbox"></i></span>
-                        </a>
-                        <a class="navbar-item">
-                            <span>{{ votingPower }} <i class="fas fa-bolt"></i></span>
-                        </a>
-                        <a class="navbar-item">
-                            <span>{{ pending.comments }} <i class="fas fa-comment-alt"></i></span>
-                        </a>
-                        <a class="navbar-item">
-                            <span>{{ pending.votes }} <i class="fas fa-chevron-circle-up"></i></span>
-                        </a>
-                        <a class="navbar-item" @click.prevent="reload">
-                            <span><i class="fa fa-refresh"></i> Reload</span>
-                        </a>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">
-                                {{ username }}
-                            </a>
-                            <div class="navbar-dropdown">
-                                <a target="_blank" href="https://steemconnect.com/dashboard" class="navbar-item">SteemConnect Dashboard</a>
-                                <a target="_blank" :href="$options.filters.profile(username)" class="navbar-item">Steemit Profile</a>
-                                <a class="navbar-item" @click.prevent="clearIgnoreList">Clear ignore list</a>
-                                <hr class="navbar-divider">
-                                <a @click.prevent="logout" href="#" class="navbar-item">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-            <div class="columns" id="mail-app">
-                <div class="column is-4 messages hero is-fullheight" id="message-feed">
-                    <div class="inbox-messages" id="inbox-messages">
-                        <!-- https://vuejs.org/v2/guide/transitions.html -->
-                        <transition
-                                name="custom-classes-transition"
-                                enter-active-class="animated bounceInRight"
-                                leave-active-class="animated bounceOutRight">
-                            <div v-if="dialog != null" class="notification" :class="dialog.type">
-                                <button class="delete" @click.prevent="closeDialog"></button>
-                                {{ dialog.data }}
-                            </div>
-                        </transition>
-                        <div v-for="msg in messages" class="card" :id="'msg-card-'+msg.id" @click="showMessage(msg)" :data-preview-id="msg.id">
-                            <div class="card-content" :class="[msg.reputation < 25 ? 'low-reputation': '']">
-                                <div class="msg-header">
-                                    <a target="_blank" :href="$options.filters.profile(msg.from)">
-                                        <span class="steem-username">@{{ msg.from }} ({{ parseInt(msg.reputation) }})</span>
-                                    </a>
-                                    <span class="msg-attachment">&nbsp;<a @click="addCommentToIgnore(msg.id)"><i class="fa fa-window-close red"></i></a></span>
-                                    <span class="msg-timestamp">{{ msg.timestamp | date }}</span>
-                                </div>
-                                <div class="msg-subject">
-                                    <span class="msg-subject"><strong>{{ msg.subject }}</strong></span>
-                                    <span class="msg-attachment">
-                                        ({{ msg.payout }} <i class="fa fa-dollar">)</i>&nbsp;
-                                        <a target="_blank" :href="$options.filters.steemit(msg.url)"><i class="fa fa-paperclip"></i></a>
-                                    </span>
-                                </div>
-                                <div class="msg-snippet">
-                                    <!-- Balise v-html : https://fr.vuejs.org/v2/guide/syntax.html#Interpretation-du-HTML -->
-                                    <!-- Usage des filtres : https://github.com/vuejs/vue/issues/4352 -->
-                                    <p v-html="$options.filters.truncate($options.filters.markdownToHTML(msg.content), 250)"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-content" v-show="!hasComments">
-                            <div class="msg-subject">
-                                <span class="msg-subject"><strong>No comments</strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-8 message hero is-fullheight" id="message-pane" v-show="hasComments">
-                    <div class="box message-preview">
-                        <div v-if="selectedComment" class="top">
-                            <div class="avatar">
-                                <img :src="$options.filters.avatar(selectedComment.from)">
-                            </div>
-                            <div class="address">
-                                <div class="steem-username">
-                                    <a target="_blank" :href="$options.filters.profile(selectedComment.from)">
-                                        @{{ selectedComment.from }} ({{ parseInt(selectedComment.reputation) }})
-                                    </a>
-                                </div>
-                                <button @click.prevent="followAccount(selectedComment.from)" class="button is-success is-small">
-                                    Follow @{{ selectedComment.from }}
-                                </button>
-                                <button @click.prevent="unfollowAccount(selectedComment.from)" class="button is-warning is-small">
-                                    Unfollow @{{ selectedComment.from }}
-                                </button>
-                                <button @click.prevent="ignoreAccount(selectedComment.from)" class="button is-danger is-small">
-                                    Ignore @{{ selectedComment.from }}
-                                </button>
-                            </div>
-                            <div>
-                                <span class="msg-attachment">
-                                    <a target="_blank" :href="$options.filters.steemit(selectedComment.url)">
-                                        <i class="fa fa-paperclip"></i>
-                                    </a>
-                                </span>
-                                <span class="subject"><strong>{{ selectedComment.subject }}</strong></span>
-                            </div>
-                            <hr>
-                            <div class="content" v-html="$options.filters.markdownToHTML(selectedComment.content)">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <div class="field">
-                            <label class="label">Your Vote ({{ vote }}%)</label>
-                            <div class="control">
-                                <input id="vote-slider" class="slider is-fullwidth is-info is-large" step="1" min="0" max="100" :value="vote" @change.prevent="changeVote" type="range">
-                                <div class="buttons has-addons is-centered">
-                                    <span v-for="votePercent in voteQuickSelector" class="button is-large" :class="{ 'is-selected' : (vote == votePercent),  'is-info' : (vote == votePercent)   }" @click.prevent="setVote(votePercent)">
-                                    {{votePercent}}%
-                                </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label class="label">Your Fast Reply</label>
-                            <div class="control">
-                                <textarea id="reply" class="textarea reply" type="text" placeholder="Reply here..."></textarea>
-                            </div>
-                        </div>
-                        <div class="buttons has-addons is-grouped is-centered">
-                            <span v-for="emoji in emojiQuickSelector" class="button is-large" @click.prevent="addEmoji(emoji)">
-                                {{emoji}}
-                            </span>
-                        </div>
-                        <div class="field is-grouped is-grouped-right">
-                            <!--div class="control">
-                            <button disabled class="button is-large is-info" @click.prevent="shareSelectedComment">Share</button>
-                          </div-->
-                            <div class="control">
-                                <button class="button is-large is-link is-rounded" @click.prevent="replyToSelectedComment">Reply</button>
-                            </div>
-                            <div class="control">
-                                <button class="button is-large is-success is-rounded" @click.prevent="voteAndReplyToSelectedComment">Vote and Reply</button>
-                            </div>
-                            <div class="control">
-                                <button id="vote" class="button is-large is-warning is-rounded" @click.prevent="voteSelectedComment">Vote</button>
-                            </div>
-                            <div class="control">
-                                <button id="ignore" class="button is-large is-danger is-rounded" @click.prevent="ignoreSelectedComment">Ignore</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="hero is-success is-fullheight" v-else>
-            <div class="hero-body">
-                <div class="container has-text-centered">
-                    <div class="column is-4 is-offset-4">
-                        <div class="box">
-                            <figure class="avatar">
-                                <img src="img/sc2.png">
-                            </figure>
-                            <form>
-                                <a :href="loginUrl" class="button is-block is-info is-large">Login</a>
-                            </form>
-                        </div>
-                        <p class="has-text-grey">
-                            <a href="https://steemit.com/pick_account">Steemit.com</a> &nbsp;·&nbsp;
-                            <a href="https://v2.steemconnect.com/accounts/create">SteemConnect</a> &nbsp;·&nbsp;
-                            <a href="https://anon.steem.network/">AnonSteem</a> &nbsp;·&nbsp;
-                            <a href="http://account.steem.vc/">SteemVC</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <!-- Starts the application -->
-    <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/bulma-extensions.js"></script>
-</body>
-
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
 </html>
