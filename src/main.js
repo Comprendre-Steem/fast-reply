@@ -1,6 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import Raven from 'raven-js'
+import RavenVue from 'raven-js/plugins/vue'
 
 // Load 3rd patry libs
 import 'bulma/css/bulma.css'
@@ -19,6 +21,12 @@ import App from '@/App'
 Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
+
+// Sentry.io configuration
+Raven
+  .config('https://b8ee76cd3ced4d5aa02d88cae485d9fa@sentry.io/1215865', {release: '0.3-beta'})
+  .addPlugin(RavenVue, Vue)
+  .install()
 
 /* eslint-disable no-new */
 new Vue({
