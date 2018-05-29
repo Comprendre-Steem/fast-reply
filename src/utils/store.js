@@ -8,6 +8,7 @@ import steem from 'steem'
 import sc2 from 'sc2-sdk'
 import sc2Utils from '@/utils/sc2-utils.js'
 // Utils
+import Raven from 'raven-js'
 import toast from '@/utils/toast.js'
 
 // Plugin declaration
@@ -167,7 +168,10 @@ export default new Vuex.Store({
       state.steemconnect.api.setAccessToken(token)
       commit('connect',
         await state.steemconnect.api.me()
-          .catch(err => console.log(err))
+          .catch(err => {
+            console.log(err)
+            Raven.captureException(err)
+          })
       )
       // Force reload on login
       dispatch('reload')
@@ -209,6 +213,7 @@ export default new Vuex.Store({
             } else {
               console.log(err)
               toast.createDialog('error', 'Could not load related accounts: ' + err, 2000)
+              Raven.captureException(err)
             }
           })
         }
@@ -278,6 +283,7 @@ export default new Vuex.Store({
               console.log('Error SC2 during comment: ', err.error_description)
               console.log('Failed action: ', action)
               commit('failedAttempt', action)
+              Raven.captureException(err)
             })
           break
         }
@@ -293,6 +299,7 @@ export default new Vuex.Store({
                 console.log('Failed action: ', action)
                 console.log('Error SC2 during vote: ', err.error_description)
                 commit('failedAttempt', action)
+                Raven.captureException(err)
               }
             })
           break
