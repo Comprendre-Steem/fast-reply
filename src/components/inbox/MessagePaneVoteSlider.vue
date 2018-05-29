@@ -1,5 +1,5 @@
 <template>
-  <div class="field">
+  <div class="field" v-shortkey.prevent="{prev: ['home'], next: ['end'], minus10: ['shift', 'home'], plus10: ['shift', 'end']}" @shortkey="changeVoteHotkey">
     <label class="label">Your Vote ({{ vote }}%)</label>
     <div class="control">
       <input id="vote-slider" class="slider is-fullwidth is-large" :class="[vote >= 0 ? 'is-info': 'is-danger']" step="1" min="-100" max="100" :value="vote" @change.prevent="changeVote" type="range">
@@ -13,6 +13,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import HotKeys from 'vue-shortkey'
+
+Vue.use(HotKeys)
+
 export default {
   name: 'message-pane-vote-slider',
   computed: {
@@ -24,12 +29,33 @@ export default {
     }
   },
   methods: {
-    // TODO regroup change vote methods
     setVote (value) {
       this.$store.dispatch('config', {key: 'vote', value: value})
     },
     changeVote (event) {
-      this.$store.dispatch('config', {key: 'vote', value: event.target.value})
+      this.setVote(event.target.value)
+    },
+    changeVoteHotkey (event) {
+      switch (event.srcKey) {
+        case 'prev':
+          let prev = this.voteQuickSelector.filter(value => value < this.vote).pop()
+          if (prev) {
+            this.setVote(prev)
+          }
+          break
+        case 'next':
+          let next = this.voteQuickSelector.filter(value => value > this.vote).shift()
+          if (next) {
+            this.setVote(next)
+          }
+          break
+        case 'minus10':
+          this.setVote(Math.max(this.vote - 10, -100))
+          break
+        case 'plus10':
+          this.setVote(Math.min(this.vote + 10, 100))
+          break
+      }
     }
   }
 }
