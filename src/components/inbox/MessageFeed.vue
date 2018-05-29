@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-4 messages hero is-fullheight" id="message-feed">
+  <div class="column is-4 messages hero is-fullheight" id="message-feed" v-shortkey.prevent="{up: ['pageup'], down: ['pagedown']}" @shortkey="changeSelectedComment">
     <div class="inbox-messages" id="inbox-messages">
       <div v-for="msg in messages" class="card" :class="[(selectedComment && selectedComment.id === msg.id) ? 'active' : '']" :key="msg.id" :id="'msg-card-'+msg.id" @click="selectComment(msg)" :data-preview-id="msg.id">
         <div class="card-content" :class="[msg.reputation < 25 ? 'low-reputation': '']">
@@ -41,7 +41,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import HotKeys from 'vue-shortkey'
 import toast from '@/utils/toast.js'
+
+Vue.use(HotKeys)
+
 export default {
   name: 'message-feed',
   computed: {
@@ -85,6 +90,31 @@ export default {
   methods: {
     selectComment (comment) {
       this.$store.dispatch('selectComment', comment)
+    },
+    changeSelectedComment (event) {
+      if (this.selectedComment) {
+        let index = this.messages.indexOf(this.selectedComment)
+        if (index >= 0) {
+          switch (event.srcKey) {
+            case 'up':
+              if (index > 0) {
+                this.$store.dispatch('selectComment', this.messages[index - 1])
+              }
+              break
+            case 'down':
+              if (index < this.messages.length - 1) {
+                this.$store.dispatch('selectComment', this.messages[index + 1])
+              }
+              break
+          }
+        }
+      } else {
+        // not comment currently selected
+        if (this.messages.length > 0) {
+          // Select first message from list
+          this.$store.dispatch('selectComment', this.messages[0])
+        }
+      }
     },
     ignoreComment (comment) {
       this.$store.dispatch('markCommentProcessed', comment.id)
