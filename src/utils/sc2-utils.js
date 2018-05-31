@@ -8,13 +8,19 @@ export default {
       '<a href="https://steemit.com/utopian-io/@roxane/fast-reply-v0-1-never-miss-to-answer-a-comment-again-and-do-it-faster-than-ever">' +
       'Sent with Fast-Reply</a></sub></div>'
 
+    var includeSignature = false
+    var commentBody = body
+    if (includeSignature) {
+      commentBody += signature
+    }
+
     return api.comment(
       author,
       permlink,
       me,
       permlink + '-' + created,
       '',
-      body + signature,
+      commentBody,
       {app: 'fast-reply', version: 0.2}
     )
   },
