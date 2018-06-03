@@ -102,14 +102,14 @@ export default new Vuex.Store({
       state.config = Vue.ls.get(LS_CONFIG + '_' + state.steemconnect.user.name, state.config)
       // Config migration 0.1 => 0.2
       if (!state.config.version) {
-        this.$store.dispatch('config', {key: 'sort', value: {field: 'created', inverted: false}})
-        this.$store.dispatch('config', {key: 'version', value: 0.2})
+        state.config['sort'] = {field: 'created', inverted: false}
+        state.config['version'] = 0.2
         console.log('Configuration migrated to 0.2')
       }
       // Config migration 0.2 => 0.3
       if (state.config.version === 0.2) {
-        this.$store.dispatch('config', {key: 'signature', value: defaultSignature})
-        this.$store.dispatch('config', {key: 'version', value: 0.3})
+        state.config['signature'] = defaultSignature
+        state.config['version'] = 0.3
         console.log('Configuration migrated to 0.3')
       }
       this.commit('saveConfig')
