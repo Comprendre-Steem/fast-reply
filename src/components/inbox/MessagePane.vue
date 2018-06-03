@@ -23,10 +23,12 @@
               placeholder="Reply here..."
               v-shortkey.focus="['alt', 'esc']">
             </textarea>
+            <MessagePaneEditorSignature @signature="changeSignature"></MessagePaneEditorSignature>
           </div>
-          <div id="preview" v-if="preview" class="column is-6" v-html="$options.filters.markdownToHTML(reply)">
+          <div id="preview" v-if="preview" class="column is-6" v-html="$options.filters.markdownToHTML(reply + signature)">
           </div>
         </div>
+        <br style="clear:both" />
       </div>
       <div class="buttons has-addons is-grouped is-centered">
         <span v-for="(emoji, index) in emojiQuickSelector" :key="emoji"
@@ -87,13 +89,14 @@ import VTooltip from 'v-tooltip'
 import toast from '@/utils/toast.js'
 import MessagePanePreview from '@/components/inbox/MessagePanePreview'
 import MessagePaneVoteSlider from '@/components/inbox/MessagePaneVoteSlider'
+import MessagePaneEditorSignature from '@/components/inbox/MessagePaneEditorSignature'
 
 Vue.use(HotKeys)
 Vue.use(VTooltip)
 
 export default {
   name: 'message-pane',
-  components: { MessagePanePreview, MessagePaneVoteSlider },
+  components: { MessagePanePreview, MessagePaneVoteSlider, MessagePaneEditorSignature },
   data () {
     return {
       reply: '',
@@ -204,6 +207,10 @@ export default {
     tooglePreview: function () {
       console.log('toggle preview panel')
       this.preview = !this.preview
+    },
+    changeSignature: function (signature) {
+      this.$store.dispatch('config', {key: 'signature', value: signature})
+      document.getElementById('reply').focus()
     },
 
     /** Add pending actions - for Scheduler **/

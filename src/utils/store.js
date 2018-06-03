@@ -30,7 +30,7 @@ let defaultSort = {
   inverted: false
 }
 
-const defaultSignature = '<br/><div class="pull-right"><sub><a href="https://steemit.com/@fast-reply">Sent with Fast-Reply</a></sub></div>'
+const defaultSignature = '<div class="pull-right"><sub><a href="https://steemit.com/@fast-reply">Sent with Fast-Reply</a></sub></div>'
 
 let defaultConfig = {
   version: 0.3,

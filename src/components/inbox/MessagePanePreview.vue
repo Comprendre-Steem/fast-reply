@@ -32,8 +32,10 @@
         </span>
       </div>
       <hr>
-      <div class="content" v-html="$options.filters.markdownToHTML(selectedComment.body)">
+      <div class="content"
+           v-html="$options.filters.markdownToHTML(selectedComment.body)">
       </div>
+      <br style="clear:both" />
     </div>
   </div>
 </template>
@@ -83,18 +85,5 @@ export default {
 </script>
 
 <style scoped>
-/**
-Steemit specific formatting classes
-https://steemit.com/steemit/@steemitblog/new-advanced-formatting-features
-**/
-.pull-left {
-  float: left;
-}
-.pull-right {
-  float: right;
-}
-.text-justify {
-  text-align: justify;
-  text-justify: inter-word;
-}
+
 </style>

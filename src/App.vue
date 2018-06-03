@@ -194,4 +194,19 @@ export default {
   a.action.ripple {
     color: white;
   }
+
+  /**
+  Steemit specific formatting classes
+  https://steemit.com/steemit/@steemitblog/new-advanced-formatting-features
+  **/
+  .pull-left {
+    float: left;
+  }
+  .pull-right {
+    float: right;
+  }
+  .text-justify {
+    text-align: justify;
+    text-justify: inter-word;
+  }
 </style>
