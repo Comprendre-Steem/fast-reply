@@ -167,10 +167,6 @@ export default {
     color: #5D5D5D;
   }
 
-  .fa-paperclip {
-    color: #1a75ff;
-  }
-
   .avatar img {
     max-width: 120px;
     max-height: 80px;
