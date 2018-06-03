@@ -24,6 +24,7 @@
     "vue-awesome": "^3.0.0",
     "vue-ls": "^3.0.5",
     "vue-router": "^3.0.1",
+    "vue-shortkey": "^3.1.4",
     "vue-toasted": "^1.1.24",
     "vuex": "^3.0.1"
   },

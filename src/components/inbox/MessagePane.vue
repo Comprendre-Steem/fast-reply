@@ -4,32 +4,75 @@
     <div id="message-reply" class="control" @drop.prevent="onDrop" @dragover.prevent>
       <MessagePaneVoteSlider></MessagePaneVoteSlider>
       <div class="field">
-        <label class="label">Your Fast Reply (<a @click="preview = !preview">Preview</a>)</label>
+        <label class="label">
+          Your Fast Reply (
+          <a @click="tooglePreview"
+             v-shortkey.prevent="['ctrl', '@']" @shortkey="tooglePreview"
+             v-tooltip.top="'CTRL+@'">
+            Preview
+          </a>
+          )
+        </label>
         <div class="control columns">
           <div class="column" :class="[preview ? 'is-6' : 'is-12']">
-            <textarea id="reply" class="textarea reply" type="text" v-model="reply" placeholder="Reply here..."></textarea>
+            <textarea
+              id="reply"
+              class="textarea reply"
+              type="text"
+              v-model="reply"
+              placeholder="Reply here..."
+              v-shortkey.focus="['alt', 'esc']">
+            </textarea>
           </div>
           <div id="preview" v-if="preview" class="column is-6" v-html="$options.filters.markdownToHTML(reply)">
           </div>
         </div>
       </div>
       <div class="buttons has-addons is-grouped is-centered">
-        <span v-for="emoji in emojiQuickSelector" :key="emoji" class="button is-large" @click.prevent="addContent(emoji)">
+        <span v-for="(emoji, index) in emojiQuickSelector" :key="emoji"
+              class="button is-large"
+              @click.prevent="addContent(emoji)"
+              v-shortkey.prevent="['alt', 'f' + (index +1)]" @shortkey="addContent(emoji)"
+              v-tooltip.bottom="'ALT+F'+(index+1)">
           {{ emoji }}
         </span>
       </div>
       <div class="field is-grouped is-grouped-right">
         <div class="control">
-          <button class="button is-large is-link is-rounded" @click.prevent="replyToSelectedComment">Reply</button>
+          <button id="replyButton"
+                  class="button is-large is-link is-rounded"
+                  @click.prevent="replyToSelectedComment"
+                  v-shortkey.prevent="['ctrl', 'f9']" @shortkey="replyToSelectedComment"
+                  v-tooltip.bottom="'CTRL+F9'">
+            Reply
+          </button>
         </div>
         <div class="control">
-          <button class="button is-large is-success is-rounded" @click.prevent="voteAndReplyToSelectedComment">Vote and Reply</button>
+          <button id="voteAndReplyButton"
+                  class="button is-large is-success is-rounded"
+                  @click.prevent="voteAndReplyToSelectedComment"
+                  v-shortkey.prevent="['ctrl', 'f10']" @shortkey="voteAndReplyToSelectedComment"
+                  v-tooltip.bottom="'CTRL+F10'">
+            Vote and Reply
+          </button>
         </div>
         <div class="control">
-          <button id="vote" class="button is-large is-warning is-rounded" @click.prevent="voteSelectedComment">Vote</button>
+          <button id="voteButton"
+                  class="button is-large is-warning is-rounded"
+                  @click.prevent="voteSelectedComment"
+                  v-shortkey.prevent="['ctrl', 'f11']" @shortkey="voteSelectedComment"
+                  v-tooltip.bottom="'CTRL+F11'">
+            Vote
+          </button>
         </div>
         <div class="control">
-          <button id="ignore" class="button is-large is-danger is-rounded" @click.prevent="ignoreSelectedComment">Ignore</button>
+          <button id="ignoreButton"
+                  class="button is-large is-danger is-rounded"
+                  @click.prevent="ignoreSelectedComment"
+                  v-shortkey.prevent="['ctrl', 'f12']" @shortkey="ignoreSelectedComment"
+                  v-tooltip.bottom="'CTRL-F12'">
+            Ignore
+          </button>
         </div>
       </div>
     </div>
@@ -37,9 +80,16 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import HotKeys from 'vue-shortkey'
+import VTooltip from 'v-tooltip'
+
 import toast from '@/utils/toast.js'
 import MessagePanePreview from '@/components/inbox/MessagePanePreview'
 import MessagePaneVoteSlider from '@/components/inbox/MessagePaneVoteSlider'
+
+Vue.use(HotKeys)
+Vue.use(VTooltip)
 
 export default {
   name: 'message-pane',
@@ -67,7 +117,7 @@ export default {
       return this.$store.getters.config.vote
     },
     emojiQuickSelector () {
-      return ['👍', '😀', '😘', '😍', '😆', '😎', '😅', '😂', '😱', '🙏', '🙄', '😭', '❤️']
+      return ['👍', '😀', '😘', '😍', '😆', '😎', '😅', '😂', '😱', '🙏', '😭', '❤️']
     }
   },
   methods: {
@@ -147,6 +197,10 @@ export default {
           this.$store.dispatch('markCommentProcessed', this.selectedComment.id)
         }
       }
+    },
+    tooglePreview: function () {
+      console.log('toggle preview panel')
+      this.preview = !this.preview
     },
 
     /** Add pending actions - for Scheduler **/
