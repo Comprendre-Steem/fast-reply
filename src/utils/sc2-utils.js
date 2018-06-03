@@ -4,18 +4,14 @@ export default {
     return api.vote(me, author, permlink, weight * 100)
   },
   comment: function (api, me, author, permlink, body, created) {
-    const signature = '<br/><div class="pull-right"><sub>' +
-      '<a href="https://steemit.com/utopian-io/@roxane/fast-reply-v0-1-never-miss-to-answer-a-comment-again-and-do-it-faster-than-ever">' +
-      'Sent with Fast-Reply</a></sub></div>'
-
     return api.comment(
       author,
       permlink,
       me,
       permlink + '-' + created,
       '',
-      body + signature,
-      {app: 'fast-reply', version: 0.2}
+      body,
+      {app: 'fast-reply', version: 0.3}
     )
   },
   follow: function (api, me, username) {

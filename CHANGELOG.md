@@ -35,3 +35,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Hotkeys
 - Sentry support
 - News menu item
+- Support multiple config, one per username

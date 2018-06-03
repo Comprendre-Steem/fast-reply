@@ -118,6 +118,9 @@ export default {
     },
     emojiQuickSelector () {
       return ['👍', '😀', '😘', '😍', '😆', '😎', '😅', '😂', '😱', '🙏', '😭', '❤️']
+    },
+    signature () {
+      return this.$store.getters.config.signature
     }
   },
   methods: {
@@ -224,7 +227,7 @@ export default {
         title: this.selectedComment.rootTitle,
         url: this.selectedComment.url,
         permlink: this.selectedComment.permlink,
-        body: body,
+        body: body + this.signature,
         created: Date.now(),
         attempts: 0
       }

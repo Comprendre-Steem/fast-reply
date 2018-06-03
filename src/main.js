@@ -42,13 +42,6 @@ new Vue({
     if (token != null) {
       this.$store.dispatch('connect', token)
     }
-
-    // Config migration 0.1 => 0.2
-    if (!this.$store.getters.config.version) {
-      this.$store.dispatch('config', {key: 'sort', value: {field: 'created', inverted: false}})
-      this.$store.dispatch('config', {key: 'version', value: 0.2})
-      console.log('Configuration migrated to 0.2')
-    }
   },
   mounted () {
     const SECOND = 1000

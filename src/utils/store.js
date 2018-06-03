@@ -30,11 +30,16 @@ let defaultSort = {
   inverted: false
 }
 
+const defaultSignature = '<br/><div class="pull-right"><sub><a href="https://steemit.com/@fast-reply">Sent with Fast-Reply</a></sub></div>'
+
 let defaultConfig = {
-  version: 0.2,
+  version: 0.3,
   ignoreList: {comments: [], users: []},
   vote: 100,
-  sort: defaultSort
+  // Since 0.2
+  sort: defaultSort,
+  // Since 0.3
+  signature: defaultSignature
 }
 
 const filterIgnored = function (comments, filter, ignoreList) {
@@ -59,7 +64,7 @@ export default new Vuex.Store({
       user: null,
       vp: null
     },
-    config: Vue.ls.get(LS_CONFIG, defaultConfig),
+    config: defaultConfig,
     timers: {},
     inbox: {
       comments: null,
@@ -76,7 +81,7 @@ export default new Vuex.Store({
   mutations: {
     clearIgnoreList (state) {
       state.config.ignoreList = {comments: [], users: []}
-      Vue.ls.set(LS_CONFIG, state.config)
+      this.commit('saveConfig')
     },
     connect (state, result) {
       state.steemconnect.user = result.account
@@ -89,9 +94,33 @@ export default new Vuex.Store({
       state.steemconnect.user = null
       state.steemconnect.vp = null
     },
+    loadConfig (state) {
+      console.log('Loading config...')
+      // First, attempt to load 0.2 config
+      state.config = Vue.ls.get(LS_CONFIG, defaultConfig)
+      // Then overload with 0.3 config, if present
+      state.config = Vue.ls.get(LS_CONFIG + '_' + state.steemconnect.user.name, state.config)
+      // Config migration 0.1 => 0.2
+      if (!state.config.version) {
+        this.$store.dispatch('config', {key: 'sort', value: {field: 'created', inverted: false}})
+        this.$store.dispatch('config', {key: 'version', value: 0.2})
+        console.log('Configuration migrated to 0.2')
+      }
+      // Config migration 0.2 => 0.3
+      if (state.config.version === 0.2) {
+        this.$store.dispatch('config', {key: 'signature', value: defaultSignature})
+        this.$store.dispatch('config', {key: 'version', value: 0.3})
+        console.log('Configuration migrated to 0.3')
+      }
+      this.commit('saveConfig')
+    },
     config (state, {name, value}) {
       state.config[name] = value
-      Vue.ls.set(LS_CONFIG, state.config)
+      this.commit('saveConfig')
+    },
+    saveConfig (state) {
+      const key = LS_CONFIG + '_' + state.steemconnect.user.name
+      Vue.ls.set(key, state.config)
     },
     timer (state, timer) {
       if (state.timers[timer]) {
@@ -129,7 +158,7 @@ export default new Vuex.Store({
       }
       // Push to ignore list
       state.config.ignoreList.comments.push(commentId)
-      Vue.ls.set(LS_CONFIG, state.config)
+      this.commit('saveConfig')
     },
 
     /** Managing pending actions **/
@@ -158,27 +187,38 @@ export default new Vuex.Store({
       if (type === 'ignore') {
         // Use those names as ignore list to filter the messages
         state.config.ignoreList.users = Array.from(accounts)
-        Vue.ls.set(LS_CONFIG, state.config)
+        this.commit('saveConfig')
       }
     }
   },
   actions: {
     async connect ({ dispatch, commit, state }, token) {
+      let success = false
       // wait for async call to resolve using await, then use result
       state.steemconnect.api.setAccessToken(token)
-      commit('connect',
-        await state.steemconnect.api.me()
-          .catch(err => {
-            console.log(err)
-            Raven.captureException(err)
-          })
-      )
-      // Force reload on login
-      dispatch('reload')
-      // Retrieve user VP
-      dispatch('updateVP')
-      // Load account (un)follow/mute list
-      dispatch('loadAccounts')
+      await state.steemconnect.api.me()
+        .then(result => {
+          commit('connect', result)
+          success = true
+          return result
+        })
+        .catch(err => {
+          console.log(err)
+          Raven.captureException(err)
+        })
+
+      if (success) {
+        // Load connected user configuration, if present
+        commit('loadConfig')
+        // Force reload on login
+        dispatch('reload')
+        // Retrieve user VP
+        dispatch('updateVP')
+        // Load account (un)follow/mute list
+        dispatch('loadAccounts')
+      } else {
+        toast.createDialog('error', 'Error during login', 5000)
+      }
     },
     updateVP ({ dispatch, commit, state }) {
       if (state.steemconnect.user) {
