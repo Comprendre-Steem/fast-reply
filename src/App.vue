@@ -185,10 +185,6 @@ export default {
 
   /* ---- Hover ---- */
 
-  .navbar-dropdown a:hover {
-    transform: scale(1.2);
-  }
-
   button:hover {
     opacity:0.7;
   }
