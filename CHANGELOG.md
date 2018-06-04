@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Hotkeys
 - Sentry support
 - News menu item
+- New Logo
 
 ### Changed
 - Signature is now customizable
