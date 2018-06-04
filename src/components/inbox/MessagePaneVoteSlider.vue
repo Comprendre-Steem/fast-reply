@@ -4,7 +4,7 @@
     <div class="control">
       <input id="vote-slider" class="slider is-fullwidth is-large" :class="[vote >= 0 ? 'is-info': 'is-danger']" step="1" min="-100" max="100" :value="vote" @change.prevent="changeVote" type="range">
       <div class="buttons has-addons is-centered">
-        <span v-for="votePercent in voteQuickSelector" :key="votePercent" class="button is-large" :class="{'is-selected': (vote == votePercent),'is-info': (vote == votePercent)}" @click.prevent="setVote(votePercent)">
+        <span v-for="votePercent in voteQuickSelector" :key="votePercent" class="button" :class="{'is-selected': (vote == votePercent),'is-info': (vote == votePercent)}" @click.prevent="setVote(votePercent)">
           {{votePercent}}%
         </span>
       </div>
